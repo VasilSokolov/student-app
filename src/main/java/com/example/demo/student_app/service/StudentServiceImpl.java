@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,8 +31,8 @@ public class StudentServiceImpl implements StudentService {
 
     public List<StudentDTO> findAllBySchoolNotNull(){
 
-
-        List<Student> students = studentRepo.findAllBySchoolIsNotNull();
+        List<Student> students = studentRepo.findBySchoolIsNotNull();
+//        List<Student> students = new CopyOnWriteArrayList<>(studentRepo.findBySchoolIsNotNull());
         return students.stream()
                 .map(student -> new StudentDTO(student.getId(), student.getName(), student.getSchool().getId()))
                 .collect(Collectors.toList());

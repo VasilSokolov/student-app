@@ -26,7 +26,8 @@ public class Student {
     private Integer age;
 
     @ManyToOne
-    @JoinColumn(name = "school_id", nullable = false)
+    @JoinColumn(name = "school_id"
+            , nullable = false)
     @JsonIgnore
     private School school;
 

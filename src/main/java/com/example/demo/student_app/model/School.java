@@ -22,6 +22,6 @@ public class School {
     private Long id;
     private String name;
 
-    @OneToMany(mappedBy = "school", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)
     private Set<Student> students;
 }
