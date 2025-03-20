@@ -2,8 +2,10 @@ package com.example.demo.student_app.service;
 
 
 import com.example.demo.student_app.dto.StudentDTO;
+import com.example.demo.student_app.exception.ResourceNotFoundException;
 import com.example.demo.student_app.model.Student;
 import com.example.demo.student_app.repository.StudentRepo;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,7 +34,6 @@ public class StudentServiceImpl implements StudentService {
     public List<StudentDTO> findAllBySchoolNotNull(){
 
         List<Student> students = studentRepo.findBySchoolIsNotNull();
-//        List<Student> students = new CopyOnWriteArrayList<>(studentRepo.findBySchoolIsNotNull());
         return students.stream()
                 .map(student -> new StudentDTO(student.getId(), student.getName(), student.getSchool().getId()))
                 .collect(Collectors.toList());
@@ -42,7 +43,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     @Transactional
     public List<StudentDTO> findAllByAge(Integer age) {
-        Student byAgeIsNotNull = studentRepo.findByAge(age);
+        Student byAgeIsNotNull = studentRepo.findByAge(age).orElseThrow(() -> new ResourceNotFoundException("Student with age " + age + " not found"));
         List<Student> students = studentRepo.findAllByAge(byAgeIsNotNull.getAge());
         return students.stream()
                 .map(student -> new StudentDTO(student.getId(), student.getName(), student.getSchool().getId()))
